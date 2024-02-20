@@ -38,7 +38,7 @@ sudo apt update; sudo apt full-upgrade -y; sudo reboot
 Reconnect SSH and let's start installing Misskey. 
 
 ```
-wget https://raw.githubusercontent.com/joinmisskey/bash-install/main/ubuntu.sh -O ubuntu.sh; sudo bash ubuntu.sh
+wget https://raw.githubusercontent.com/Lastorder-DC/cherrypick-bash-install/main/ubuntu.sh -O ubuntu.sh; sudo bash ubuntu.sh
 ```
 
 ### 4. To update
@@ -51,7 +51,7 @@ First, download the script.
 If there is an update of the update script, please wget it again.
 
 ```
-wget https://raw.githubusercontent.com/joinmisskey/bash-install/main/update.ubuntu.sh -O update.sh
+wget https://raw.githubusercontent.com/Lastorder-DC/cherrypick-bash-install/main/update.ubuntu.sh -O update.sh
 ```
 
 Run it when you want to update Misskey.
