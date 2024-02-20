@@ -264,11 +264,11 @@ case "$yn" in
 esac
 
 echo "Database user name: ";
-read -r -p "> " -e -i "misskey" db_user;
+read -r -p "> " -e -i "cherrypick" db_user;
 echo "Database user password: ";
 read -r -p "> " db_pass;
 echo "Database name:";
-read -r -p "> " -e -i "mk1" db_name;
+read -r -p "> " -e -i "cp1" db_name;
 #endregion
 
 #region redis
