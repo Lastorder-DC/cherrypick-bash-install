@@ -18,7 +18,7 @@
 # DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-version="3.2.1";
+version="3.2.1-cherrypick";
 
 tput setaf 2;
 echo "Check: root user;";
@@ -34,23 +34,23 @@ fi
 tput setaf 3;
 echo "Process: import environment and detect method;";
 tput setaf 7;
-if [ -f "/root/.misskey.env" ]; then
-	. "/root/.misskey.env";
-	if [ -f "/home/$misskey_user/.misskey.env" ]; then
-		. "/home/$misskey_user/.misskey.env";
+if [ -f "/root/.cherrypick.env" ]; then
+	. "/root/.cherrypick.env";
+	if [ -f "/home/$misskey_user/.cherrypick.env" ]; then
+		. "/home/$misskey_user/.cherrypick.env";
 		method=systemd;
-	elif [ -f "/home/$misskey_user/.misskey-docker.env" ]; then
-		. "/home/$misskey_user/.misskey-docker.env";
+	elif [ -f "/home/$misskey_user/.cherrypick-docker.env" ]; then
+		. "/home/$misskey_user/.cherrypick-docker.env";
 	else
-		misskey_user=misskey;
-		misskey_directory=misskey;
+		misskey_user=cherrypick;
+		misskey_directory=cherrypick;
 		misskey_localhost=localhost;
 		method=systemd;
 		echo "use default";
 	fi
 else
-	misskey_user=misskey;
-	misskey_directory=misskey;
+	misskey_user=cherrypick;
+	misskey_directory=cherrypick;
 	misskey_localhost=localhost;
 	method=systemd;
 	echo "use default";
@@ -98,7 +98,7 @@ tput setaf 7;
 NODE_ENV=production pnpm install --frozen-lockfile;
 
 tput setaf 3;
-echo "Process: build misskey;";
+echo "Process: build cherrypick;";
 tput setaf 7;
 NODE_OPTIONS=--max_old_space_size=3072 NODE_ENV=production pnpm run build;
 
@@ -176,10 +176,10 @@ else
 	cd ~;
 
 	tput setaf 3;
-	echo "Process: create .misskey-docker.env;"
+	echo "Process: create .cherrypick-docker.env;"
 	tput setaf 7;
 
-	cat > ".misskey-docker.env" << _EOF
+	cat > ".cherrypick-docker.env" << _EOF
 	method="$method"
 	host="$host"
 	misskey_port=$misskey_port
