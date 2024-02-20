@@ -900,10 +900,10 @@ set -eu;
 cd ~;
 
 tput setaf 3;
-echo "Process: create .misskey-docker.env;"
+echo "Process: create .cherrypick-docker.env;"
 tput setaf 7;
 
-cat > ".misskey-docker.env" << _EOF
+cat > ".cherrypick-docker.env" << _EOF
 method="$method"
 host="$host"
 misskey_port=$misskey_port
@@ -925,10 +925,10 @@ set -eu;
 cd ~;
 
 tput setaf 3;
-echo "Process: create .misskey.env;"
+echo "Process: create .cherrypick.env;"
 tput setaf 7;
 
-cat > ".misskey.env" << _EOF
+cat > ".cherrypick.env" << _EOF
 host="$host"
 misskey_port=$misskey_port
 misskey_directory="$misskey_directory"
