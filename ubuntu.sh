@@ -18,12 +18,12 @@
 # DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-version="3.2.1";
+version="3.2.1-cherrypick";
 NODE_MAJOR="20";
 
 tput setaf 4;
 echo "";
-echo "Misskey auto setup for Ubuntu";
+echo "CherryPick auto setup for Ubuntu";
 echo " v$version";
 echo "";
 
@@ -39,12 +39,12 @@ if [ "$(command -v uname)" ]; then
 		fi
 	else
 		tput setaf 1;
-		echo "	NG.";
+		echo "	Error: Not linux";
 		exit 1;
 	fi
 else
 	tput setaf 1;
-	echo "	NG.";
+	echo "	Error: Cannot check system (missing uname command)";
 	exit 1;
 fi
 
@@ -52,11 +52,11 @@ tput setaf 2;
 echo "Check: root user;";
 if [ "$(whoami)" != 'root' ]; then
 	tput setaf 1;
-	echo "	NG. This script must be run as root.";
+	echo "	Error: This script must be run as root.";
 	exit 1;
 else
 	tput setaf 7;
-	echo "	OK. I am root user.";
+	echo "	OK";
 fi
 
 tput setaf 2;
@@ -74,84 +74,38 @@ case $(uname -m) in
 		;;
 	*)
 		tput setaf 1;
-		echo "	NG. $(uname -m) is unsupported architecture.";
+		echo "	Error: $(uname -m) is unsupported architecture.";
 		exit 1;
 		;;
 esac
 #endregion
 
-#region user input
-#region method
-tput setaf 3;
-echo "";
-echo "Install Method";
-tput setaf 7;
-echo "Do you use systemd to run Misskey?:";
-echo "Y = To use systemd / n = To use docker"
-read -r -p "[Y/n] > " yn
-case "$yn" in
-	[Nn]|[Nn][Oo])
-		echo "Use Docker.";
-		method=docker;
-
-		echo "Determine the local IP of this computer as docker host.";
-		echo "The IPs that are supposed to be available are as follows (the result of hostname -I)";
-		echo "	$(hostname -I)"
-		read -r -p "> " -e -i "$(hostname -I | cut -f1 -d' ')" docker_host_ip;
-
-		echo "The host name of docker host to bind with 'docker run --add-host='.";
-		read -r -p "> " -e -i "docker_host" misskey_localhost;
-		;;
-	*)
-		echo "Use Systemd.";
-		method=systemd;
-		misskey_localhost=localhost
-		;;
-esac
-#endregion
-
-if [ $method == "docker" ]; then
-	echo "Do you use image from Docker Hub?:";
-	echo "Y = To use Docker Hub image / N = To build Docker image in this machine"
-	read -r -p "[Y/n] > " yn
-	case "$yn" in
-		[Nn]|[Nn][Oo])
-			echo "Build docker image (local/misskey:latest).";
-			method=docker;
-			docker_repository="local/misskey:latest"
-			;;
-		*)
-			echo "Use Docker Hub image.";
-			method=docker_hub;
-			echo "Enter repository:tag of Docker Hub image:"
-			read -r -p "> " -e -i "misskey/misskey:latest" docker_repository;
-			;;
-	esac
-fi
+method=systemd;
+misskey_localhost=localhost
 
 tput setaf 3;
-echo "Misskey setting";
+echo "CherryPick setting";
 tput setaf 7;
-misskey_directory=misskey
+misskey_directory=cherrypick
 
 if [ $method != "docker_hub" ]; then
 	echo "Repository url where you want to install:"
-	read -r -p "> " -e -i "https://github.com/misskey-dev/misskey.git" repository;
+	read -r -p "> " -e -i "https://github.com/kokonect-link/cherrypick.git" repository;
 	echo "The name of a new directory to clone:"
-	read -r -p "> " -e -i "misskey" misskey_directory;
+	read -r -p "> " -e -i "cherrypick" misskey_directory;
 	echo "Branch or Tag"
 	read -r -p "> " -e -i "master" branch;
 fi
 
 tput setaf 3;
 echo "";
-echo "Enter the name of user with which you want to execute Misskey:";
+echo "Enter the name of user with which you want to execute CherryPick:";
 tput setaf 7;
-read -r -p "> " -e -i "misskey" misskey_user;
+read -r -p "> " -e -i "cherrypick" misskey_user;
 
 tput setaf 3;
 echo "";
-echo "Enter host where you want to install Misskey:";
+echo "Enter host where you want to install CherryPick:";
 tput setaf 7;
 read -r -p "> " -e -i "example.com" host;
 tput setaf 7;
@@ -173,7 +127,7 @@ case "$yn" in
 		cloudflare=false;
 		certbot=false;
 
-		echo "Misskey port: ";
+		echo "CherryPick port: ";
 		read -r -p "> " -e -i "3000" misskey_port;
 		;;
 	*)
@@ -275,8 +229,8 @@ case "$yn" in
 				;;
 			esac
 
-		echo "Tell me which port Misskey will watch: ";
-		echo "Misskey port: ";
+		echo "Tell me which port CherryPick will watch: ";
+		echo "CherryPick port: ";
 		read -r -p "> " -e -i "3000" misskey_port;
 		;;
 esac
@@ -393,7 +347,7 @@ tput setaf 7;
 sudo mkdir -p /usr/share/keyrings;
 
 tput setaf 3;
-echo "Process: add misskey user ($misskey_user);";
+echo "Process: add CherryPick user ($misskey_user);";
 tput setaf 7;
 if cut -d: -f1 /etc/passwd | grep -q -x "$misskey_user"; then
 	echo "$misskey_user exists already. No user will be created.";
@@ -617,8 +571,8 @@ echo "Process: create nginx config;"
 tput setaf 7;
 
 cat > "/etc/nginx/conf.d/$host.conf" << NGEOF
-# nginx configuration for Misskey
-# Created by joinmisskey/bash-install v$version
+# nginx configuration for CherryPick
+# Created by Lastorder-DC/cherrypick-bash-install v$version
 
 # For WebSocket
 map \$http_upgrade \$connection_upgrade {
@@ -858,7 +812,7 @@ tput setaf 7;
 NODE_ENV=production pnpm install --frozen-lockfile;
 
 tput setaf 3;
-echo "Process: build misskey;"
+echo "Process: build CherryPick;"
 tput setaf 7;
 NODE_OPTIONS=--max_old_space_size=3072 NODE_ENV=production pnpm run build;
 
@@ -868,7 +822,7 @@ tput setaf 7;
 NODE_OPTIONS=--max_old_space_size=3072 pnpm run init;
 
 tput setaf 3;
-echo "Check: If Misskey starts correctly;"
+echo "Check: If CherryPick starts correctly;"
 tput setaf 7;
 if NODE_ENV=production timeout 40 npm start 2> /dev/null | grep -q "Now listening on port"; then
 	echo "	OK.";
@@ -880,11 +834,11 @@ MKEOF
 #endregion
 
 tput setaf 3;
-echo "Process: create misskey daemon;"
+echo "Process: create CherryPick daemon;"
 tput setaf 7;
 cat > "/etc/systemd/system/$host.service" << _EOF
 [Unit]
-Description=Misskey daemon
+Description=CherryPick daemon
 
 [Service]
 Type=simple
@@ -924,7 +878,7 @@ echo "";
 if [ $method != "systemd" ]; then
 tput setaf 2;
 tput bold;
-echo "ALL MISSKEY INSTALLATION PROCESSES ARE COMPLETE!";
+echo "ALL CherryPick INSTALLATION PROCESSES ARE COMPLETE!";
 echo "Now all we need to do is run docker run."
 tput setaf 7;
 echo "Watch the screen."
@@ -932,7 +886,7 @@ echo "When it shows \"Now listening on port $misskey_port on https://$host\","
 echo "press Ctrl+C to exit logs and jump to https://$host/ and continue setting up your instance.";
 echo ""
 echo "This script version is v$version.";
-echo "Please follow @joinmisskey@misskey.io to address bugs and updates.";
+echo "Please follow @yumeka@k.yumeka.xyz to address bugs and updates.";
 echo ""
 read -r -p "Press Enter key to execute docker run> ";
 echo ""
@@ -985,9 +939,9 @@ MKEOF
 
 tput setaf 2;
 tput bold;
-echo "ALL MISSKEY INSTALLATION PROCESSES ARE COMPLETE!";
+echo "ALL CherryPick INSTALLATION PROCESSES ARE COMPLETE!";
 echo "Jump to https://$host/ and continue setting up your instance.";
 tput setaf 7;
 echo "This script version is v$version.";
-echo "Please follow @joinmisskey@misskey.io to address bugs and updates.";
+echo "Please follow @yumeka@k.yumeka.xyz to address bugs and updates.";
 fi
